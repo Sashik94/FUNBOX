@@ -28,9 +28,6 @@ class StoreFrontViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-//        UserDefaults.standard.set(false, forKey: "FirstLoad")
-//        models = StorageServis.shared.readObject(store: true)
-//        if models.isEmpty {
         if UserDefaults.standard.object(forKey: "FirstLoad") == nil {
             UserDefaults.standard.set(false, forKey: "FirstLoad")
             networking.downloadFile()
@@ -108,9 +105,6 @@ class StoreFrontViewController: UIViewController {
         models = StorageServis.shared.readObject(store: true)
         let swipeDirection = UISwipeGestureRecognizer()
         swipeDirection.direction = .right
-//        if numberScreen > models.count {
-//            numberScreen -= 1
-//        }
         if numberScreen == 1 {
             swipeDirection.direction = .left
         }
