@@ -11,6 +11,7 @@ import Foundation
 class NetworkDataFetcher {
     
     func downloadFile() {
+        sleep(10)
         guard let path = Bundle.main.path(forResource: "data", ofType: "csv") else {
             return
         }

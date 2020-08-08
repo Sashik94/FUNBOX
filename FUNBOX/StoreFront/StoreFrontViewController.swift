@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ReloadStoreFrontViewProtocol {
+    func reloadView()
+}
+
 class StoreFrontViewController: UIViewController {
 
     @IBOutlet weak var nameLabel: UILabel!
@@ -23,6 +27,7 @@ class StoreFrontViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        StorageServis.shared.storeFrontDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -30,7 +35,12 @@ class StoreFrontViewController: UIViewController {
         
         if UserDefaults.standard.object(forKey: "FirstLoad") == nil {
             UserDefaults.standard.set(false, forKey: "FirstLoad")
-            networking.downloadFile()
+            DispatchQueue.global(qos: .background).async {
+                self.networking.downloadFile()
+                DispatchQueue.main.async {
+                    self.viewWillAppear(true)
+                }
+            }
         }
         models = StorageServis.shared.readObject(store: true)
         addSwipe()
@@ -119,3 +129,9 @@ class StoreFrontViewController: UIViewController {
     
 }
 
+extension StoreFrontViewController: ReloadStoreFrontViewProtocol {
+    func reloadView() {
+        models = StorageServis.shared.readObject(store: true)
+        filling()
+    }
+}

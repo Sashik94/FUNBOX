@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ReloadBackEndViewProtocol {
+    func reloadView()
+}
+
 class BackEndViewController: UIViewController {
     
     @IBOutlet weak var productTableView: UITableView!
@@ -16,6 +20,8 @@ class BackEndViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        StorageServis.shared.backEndDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,4 +62,10 @@ extension BackEndViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+}
+
+extension BackEndViewController: ReloadBackEndViewProtocol {
+    func reloadView() {
+        filling()
+    }
 }

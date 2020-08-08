@@ -36,9 +36,13 @@ class EditViewController: UIViewController {
     @IBAction func saveButton(_ sender: UIButton) {
         
         let newModel = ModelRealm(name: nameTextView.text, price: Int(priceTextView.text!) ?? 0, count: Int(countTextView.text!) ?? 0)
-        
-        StorageServis.shared.writeModel(model: newModel)
-        reloadView!()
+        DispatchQueue.global(qos: .background).async {
+            sleep(10)
+            StorageServis.shared.writeModel(model: newModel)
+            DispatchQueue.main.async {
+                self.reloadView!()
+            }
+        }
         dismiss(animated: true, completion: nil)
     }
     

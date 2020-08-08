@@ -13,11 +13,17 @@ class StorageServis {
     
     static var shared = StorageServis()
     private let realm = try! Realm()
+    var storeFrontDelegate: ReloadStoreFrontViewProtocol?
+    var backEndDelegate: ReloadBackEndViewProtocol?
     
     func writeModel(model: ModelRealm) {
-        try! self.realm.write {
-            self.realm.create(ModelRealm.self, value: model, update: .modified)
-            self.realm.refresh()
+        DispatchQueue.main.async {
+            try! self.realm.write {
+                self.realm.create(ModelRealm.self, value: model, update: .modified)
+                self.realm.refresh()
+                self.storeFrontDelegate?.reloadView()
+                self.backEndDelegate?.reloadView()
+            }
         }
     }
     
